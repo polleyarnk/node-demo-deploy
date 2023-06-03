@@ -1,0 +1,38 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/cart.css"/>
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+            <ul class="cart__item-list">
+                <% products.forEach(p => { %>
+                    <li class="cart__item">
+                        <h1><%= p.productId.title %></h1>
+                        <h2>Quantity: <%= p.quantity %></h2>
+                    </li>
+                <% }) %>
+            </ul>
+            <div class="centered">
+                <h2>Total: <%= totalSum %></h2>
+            </div>
+            <div class="centered">
+                <button id="order-btn" class="btn">ORDER</button>
+                <input type="hidden" value="<%= sessionId %>" name="session_checkout" id="session_checkout"/>
+                <script src="https://js.stripe.com/v3/"></script>
+                <script>
+                    var stripe = Stripe('pk_test_51NA83iSAFAuDJGZsJiYVMAaHvZkWJG51MkIIsIaAaHByjNcM2rqJbk5JIt7xtnCCOMJDt0kANJISHI39mVDvPvp300OY71dNpn');
+                    var orderBtn = document.getElementById('order-btn');
+                    //console.log('orderBtn');
+                    orderBtn.addEventListener('click', function(){
+                        //function clickme(){
+                        var session_checkout = document.getElementById('session_checkout');
+                        //console.log(session_checkout.value);
+                        stripe.redirectToCheckout({
+                            sessionId: session_checkout.value
+                        });
+                    });
+                </script>
+            </div>
+        </main>
+        <%- include('../includes/end.ejs') %>
